@@ -1,76 +1,78 @@
-// Navigation
-function navigateTo(id) {
-  document.querySelectorAll('.screen').forEach(screen => {
-    screen.classList.remove('active');
-  });
-  document.getElementById(id).classList.add('active');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap');
+
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-family: 'Orbitron', sans-serif;
+  background: linear-gradient(145deg, #0f2027, #203a43, #2c5364);
+  overflow: hidden;
 }
 
-// Typewriter Effect
-const text = "ElectroGenius";
-let index = 0;
-const typeInterval = setInterval(() => {
-  document.getElementById("type-text").textContent += text.charAt(index);
-  index++;
-  if (index >= text.length) clearInterval(typeInterval);
-}, 150);
-
-// Animated Particle Background
-const canvas = document.getElementById("background-canvas");
-const ctx = canvas.getContext("2d");
-let w, h;
-let particles = [];
-
-function resize() {
-  w = canvas.width = window.innerWidth;
-  h = canvas.height = window.innerHeight;
-}
-resize();
-window.addEventListener("resize", resize);
-
-class Particle {
-  constructor() {
-    this.reset();
-  }
-  reset() {
-    this.x = Math.random() * w;
-    this.y = Math.random() * h;
-    this.vx = (Math.random() - 0.5) * 1;
-    this.vy = (Math.random() - 0.5) * 1;
-    this.radius = 1 + Math.random() * 2;
-  }
-  update() {
-    this.x += this.vx;
-    this.y += this.vy;
-    if (this.x < 0 || this.x > w || this.y < 0 || this.y > h) this.reset();
-  }
-  draw() {
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-    ctx.fillStyle = "#ff0055";
-    ctx.fill();
-  }
-}
-for (let i = 0; i < 120; i++) {
-  particles.push(new Particle());
+canvas#background-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
 }
 
-function animate() {
-  ctx.clearRect(0, 0, w, h);
-  particles.forEach(p => {
-    p.update();
-    p.draw();
-  });
-  requestAnimationFrame(animate);
+.container {
+  position: relative;
+  z-index: 1;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
 }
-animate();
 
-// Touch Reaction
-canvas.addEventListener("pointerdown", e => {
-  for (let i = 0; i < 15; i++) {
-    const p = new Particle();
-    p.x = e.clientX;
-    p.y = e.clientY;
-    particles.push(p);
-  }
-});
+.title {
+  font-size: 2.8rem;
+  text-align: center;
+  color: white;
+  margin-bottom: 40px;
+}
+
+.cursor {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: white;
+  border-radius: 50%;
+  animation: blink 0.8s infinite;
+  vertical-align: middle;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.glass-button {
+  padding: 15px;
+  font-size: 1.4rem;
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 25px;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.glass-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
