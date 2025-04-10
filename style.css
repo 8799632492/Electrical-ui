@@ -1,100 +1,62 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Segoe UI", sans-serif;
+// Typewriter animation
+const text = "Welcome to ElectroGenius!";
+let index = 0;
+const typewriter = document.getElementById("typewriter");
+
+function type() {
+  if (index < text.length) {
+    typewriter.innerHTML += text.charAt(index);
+    index++;
+    setTimeout(type, 100);
+  }
+}
+type();
+
+// Background string animation
+const canvas = document.getElementById('background-canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let lines = [];
+for (let i = 0; i < 100; i++) {
+  lines.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    length: 20 + Math.random() * 30,
+    speed: 1 + Math.random() * 2
+  });
 }
 
-body {
-  background: #0f0f0f;
-  color: #fff;
-  overflow-x: hidden;
-  position: relative;
-  min-height: 100vh;
+function animateLines() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+  ctx.lineWidth = 2;
+  lines.forEach(line => {
+    ctx.beginPath();
+    ctx.moveTo(line.x, line.y);
+    ctx.lineTo(line.x + line.length, line.y);
+    ctx.stroke();
+    line.x += line.speed;
+    if (line.x > canvas.width) line.x = 0;
+  });
+  requestAnimationFrame(animateLines);
 }
 
-#app {
-  position: relative;
-  z-index: 1;
-  text-align: center;
-  padding: 2rem;
-}
+animateLines();
 
-canvas#background-canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 0;
-  width: 100%;
-  height: 100%;
-  background: transparent;
-}
+window.addEventListener("resize", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
 
-.hero {
-  padding: 4rem 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  align-items: center;
-  justify-content: center;
-}
-
-.typewriter {
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-  color: #ff0055;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.cursor {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  margin-left: 5px;
-  border-radius: 50%;
-  background: #ff0055;
-  animation: blink 1s infinite;
-}
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
-
-.nav-buttons {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-button {
-  background: rgba(255, 0, 85, 0.2);
-  color: #fff;
-  border: 1px solid #ff0055;
-  padding: 0.8rem 1.5rem;
-  border-radius: 12px;
-  backdrop-filter: blur(4px);
-  cursor: pointer;
-  transition: 0.3s;
-}
-button:hover {
-  background: rgba(255, 0, 85, 0.3);
-  transform: scale(1.05);
-  box-shadow: 0 0 10px #ff005580;
-}
-
-/* Screen transitions */
-.screen {
-  display: none;
-  opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.5s ease;
-}
-.screen.active {
-  display: block;
-  opacity: 1;
-  transform: translateY(0px);
-}
+canvas.addEventListener("click", () => {
+  for (let i = 0; i < 10; i++) {
+    lines.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      length: 30,
+      speed: 2 + Math.random() * 2
+    });
+  }
+});
